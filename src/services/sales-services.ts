@@ -70,28 +70,24 @@ export class SalesServices{
         }
 
     }
-
-    // static async emailUpdateIsSame(id: string, email: string | undefined | null): Promise<void>{
-    //     if (!email) {
-    //         return
-    //     }
-
-    //     const salesData = await prismaClient.sales.findFirst({
-    //         where:{
-    //             id: id,
-    //             email: email
-    //         }
-    //     })
-
-    //     if (!salesData) {
-    //         this.emailAlreadyExist(email)
-    //     }
-    // }
     
     static async get(id: string): Promise<SaleResponse>{
         id = SalesValidation.GET.parse(id)
         const salesData = await this.salesMustExist(id)
 
         return toSalesResponse(salesData)
+    }
+
+    static async delete(id: string): Promise<boolean>{
+        id = SalesValidation.DELETE.parse(id)
+        await this.salesMustExist(id)
+
+        await prismaClient.sales.delete({
+            where:{
+                id: id
+            }
+        })
+
+        return true
     }
 }

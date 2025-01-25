@@ -238,3 +238,67 @@ describe('PUT /api/sales/:id', () => {
         expect(body.data).toBeDefined()
     })
 })
+
+describe('DELETE /api/sales/:id', () => {
+    beforeEach(async () => {
+        await SalesTest.deleteAll()
+        await UserTest.create()
+        await SalesTest.create()
+    })
+
+    afterEach(async () => {
+        await SalesTest.deleteAll()
+        await UserTest.delete()
+    })
+
+    it('should success delete sales if sales is found', async () => {
+        const sales = await SalesTest.get()
+
+        const response = await app.request('/api/sales/', {
+            method: 'delete',
+            headers:{
+                'Authorization': 'test'
+            },
+            body: JSON.stringify({
+                id: sales.id
+            })
+        })
+
+        expect(response.status).toBe(200)
+        const body = await response.json()
+        logger.debug(sales)
+        logger.debug(body.data)
+        expect(body.data).toBeTrue()
+
+    })
+
+    it('should be fail if sales is not found', async () => {
+        const response = await app.request('/api/sales/', {
+            method: 'delete',
+            headers:{
+                'Authorization': 'test'
+            },
+            body: JSON.stringify({
+                id: "1"
+            })
+        })
+
+        expect(response.status).toBe(404)
+        const body = await response.json()
+        logger.debug(body.errors)
+    })
+
+    it('should be fail if not authorized', async () => {
+        const sales = await SalesTest.get()
+        const response = await app.request('/api/sales/', {
+            method: 'delete',
+            body: JSON.stringify({
+                id: sales.id
+            })
+        })
+
+        expect(response.status).toBe(401)
+        const body = await response.json()
+        logger.debug(body.errors)
+    })
+})

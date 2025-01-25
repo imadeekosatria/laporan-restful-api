@@ -15,6 +15,10 @@ export type UpdateSaleRequest = {
     address?: string
 }
 
+export type DeleteSaleRequest = {
+    id: string
+}
+
 export type SaleResponse = {
     id: string
     name: string
