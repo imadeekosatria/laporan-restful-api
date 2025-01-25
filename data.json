@@ -1,0 +1,49 @@
+{
+    "data": [
+        {
+            "tanggal": "",
+            "cukuran": 2500,
+            "pisau": 5000,
+            "gunting": 3000,
+            "pulpen": 1000,
+            "jahe merah": 5000,
+            "total": ""
+        },
+        {
+            "tanggal": "20/12/2024",
+            "cukuran": 2500,
+            "pisau": 5500,
+            "gunting": 3500,
+            "pulpen": 1200,
+            "jahe merah": 5200,
+            "total": 17900
+        },
+        {
+            "tanggal": "21/12/2024",
+            "cukuran": 3000,
+            "pisau": 6000,
+            "gunting": 4000,
+            "pulpen": 1500,
+            "jahe merah": 5500,
+            "total": 20000
+        },
+        {
+            "tanggal": "22/12/2024",
+            "cukuran": 3500,
+            "pisau": 6500,
+            "gunting": 4500,
+            "pulpen": 1800,
+            "jahe merah": 5800,
+            "total": 22100
+        },
+        {
+            "tanggal": "23/12/2024",
+            "cukuran": 4000,
+            "pisau": 7000,
+            "gunting": 5000,
+            "pulpen": 2000,
+            "jahe merah": 6000,
+            "total": 24000
+        }
+    ]
+}
