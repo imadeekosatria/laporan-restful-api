@@ -40,7 +40,9 @@ export class SalesTest{
     static async deleteAll(){
         await prismaClient.sales.deleteMany({
             where: {
-                name: "test"
+                name: {
+                    contains: "test"
+                }
             }
         })
     }

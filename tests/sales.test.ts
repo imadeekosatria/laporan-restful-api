@@ -286,6 +286,7 @@ describe('DELETE /api/sales/:id', () => {
         expect(response.status).toBe(404)
         const body = await response.json()
         logger.debug(body.errors)
+        expect(body.errors).toBeDefined()
     })
 
     it('should be fail if not authorized', async () => {
@@ -300,5 +301,72 @@ describe('DELETE /api/sales/:id', () => {
         expect(response.status).toBe(401)
         const body = await response.json()
         logger.debug(body.errors)
+        expect(body.errors).toBeDefined()
+    })
+})
+
+describe('GET /api/sales', () => {
+    beforeEach(async () => {
+        await SalesTest.deleteAll()
+        await UserTest.create()
+        await SalesTest.create()
+    })
+
+    afterEach(async () => {
+        await SalesTest.deleteAll()
+        await UserTest.delete()
+    })
+
+    it('should success get all sales', async () => {
+        await prismaClient.sales.createMany({
+            data: [
+            {
+                name: "test1",
+                email: "test1@mail.com",
+            },
+            {
+                name: "test2",
+                email: "test2@mail.com",
+            },
+            {
+                name: "test3",
+                email: "test3@mail.com",
+            },
+            {
+                name: "test4",
+                email: "test4@mail.com",
+            },
+            {
+                name: "test5",
+                email: "test5@mail.com",
+            }
+            ]
+        })
+        const response = await app.request('/api/sales', {
+            method: 'get',
+            headers:{
+                'Authorization': 'test'
+            }
+        })
+
+        expect(response.status).toBe(200)
+        const body = await response.json()
+        logger.debug(body)
+        expect(body.data).toBeDefined()
+    })
+
+    it('should fail if there is no data', async () => {
+        await SalesTest.deleteAll()
+        const response = await app.request('/api/sales', {
+            method: 'get',
+            headers:{
+                'Authorization': 'test'
+            }
+        })
+
+        expect(response.status).toBe(404)
+        const body = await response.json()
+        logger.debug(body)
+        expect(body.errors).toBeDefined()
     })
 })

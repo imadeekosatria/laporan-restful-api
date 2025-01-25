@@ -78,6 +78,18 @@ export class SalesServices{
         return toSalesResponse(salesData)
     }
 
+    static async getAll(): Promise<SaleResponse[]>{
+        const salesData = await prismaClient.sales.findMany()
+
+        if (salesData.length === 0) {
+            throw new HTTPException(404, {
+                message: "No sales records found"
+            });
+        }
+        
+        return salesData.map(toSalesResponse)
+    }
+
     static async delete(id: string): Promise<boolean>{
         id = SalesValidation.DELETE.parse(id)
         await this.salesMustExist(id)

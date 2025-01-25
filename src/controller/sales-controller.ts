@@ -29,6 +29,14 @@ salesController.get('/api/sales/:id', async (c) =>{
     })
 })
 
+salesController.get('/api/sales', async (c) =>{
+    const response = await SalesServices.getAll()
+
+    return c.json({
+        data: response
+    })
+})
+
 salesController.put('/api/sales/:id', async (c) =>{
     const salesId = String(c.req.param('id'))
     
