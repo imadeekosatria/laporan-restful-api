@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { CreateSaleRequest, DeleteSaleRequest, UpdateSaleRequest } from "../model/sales-model";
+import { CreateSaleRequest, UpdateSaleRequest } from "../model/sales-model";
 import { SalesServices } from "../services/sales-services";
 import { authMiddleware } from "../middleware/auth-middleware";
 import { ApplicationVariables } from "../model/app-model";
@@ -51,10 +51,10 @@ salesController.put('/api/sales/:id', async (c) =>{
     })
 })
 
-salesController.delete('/api/sales/', async (c) =>{
-    const sales = await c.req.json() as DeleteSaleRequest
+salesController.delete('/api/sales/:id', async (c) =>{
+    const salesId = String(c.req.param('id')) 
 
-    const response = await SalesServices.delete(sales.id)
+    const response = await SalesServices.delete(salesId)
 
     return c.json({
         data: response

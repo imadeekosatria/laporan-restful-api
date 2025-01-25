@@ -37,7 +37,7 @@ model Sales {
 
 model Produk {
   id String @id @default(uuid())
-  name String @db.VarChar(100)
+  name String @db.VarChar(100) @unique
   harga_satuan Decimal? @db.Money
   harga Decimal @db.Money
   stok Int?

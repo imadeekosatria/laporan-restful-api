@@ -254,14 +254,11 @@ describe('DELETE /api/sales/:id', () => {
     it('should success delete sales if sales is found', async () => {
         const sales = await SalesTest.get()
 
-        const response = await app.request('/api/sales/', {
+        const response = await app.request('/api/sales/' + sales.id, {
             method: 'delete',
             headers:{
                 'Authorization': 'test'
-            },
-            body: JSON.stringify({
-                id: sales.id
-            })
+            }
         })
 
         expect(response.status).toBe(200)
@@ -273,14 +270,11 @@ describe('DELETE /api/sales/:id', () => {
     })
 
     it('should be fail if sales is not found', async () => {
-        const response = await app.request('/api/sales/', {
+        const response = await app.request('/api/sales/1', {
             method: 'delete',
             headers:{
                 'Authorization': 'test'
             },
-            body: JSON.stringify({
-                id: "1"
-            })
         })
 
         expect(response.status).toBe(404)
@@ -291,11 +285,8 @@ describe('DELETE /api/sales/:id', () => {
 
     it('should be fail if not authorized', async () => {
         const sales = await SalesTest.get()
-        const response = await app.request('/api/sales/', {
-            method: 'delete',
-            body: JSON.stringify({
-                id: sales.id
-            })
+        const response = await app.request('/api/sales/'+ sales.id, {
+            method: 'delete'
         })
 
         expect(response.status).toBe(401)
