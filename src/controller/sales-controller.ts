@@ -3,7 +3,6 @@ import { CreateSaleRequest, UpdateSaleRequest } from "../model/sales-model";
 import { SalesServices } from "../services/sales-services";
 import { authMiddleware } from "../middleware/auth-middleware";
 import { ApplicationVariables } from "../model/app-model";
-import { Sales } from "@prisma/client";
 
 export const salesController = new Hono<{ Variables: ApplicationVariables }>()
 

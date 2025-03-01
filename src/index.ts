@@ -3,6 +3,7 @@ import { HTTPException } from 'hono/http-exception'
 import { ZodError } from 'zod'
 import { userController } from './controller/user-controller'
 import { salesController } from './controller/sales-controller'
+import { produkController } from './controller/produk-controller'
 
 const app = new Hono()
 
@@ -12,6 +13,7 @@ app.get('/', (c) => {
 
 app.route('/', userController)
 app.route('/', salesController)
+app.route('/', produkController)
 
 app.post('/api/test', async(c) => {
   const request = await c.req.json()
