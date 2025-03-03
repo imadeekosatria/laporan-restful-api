@@ -4,3 +4,4 @@ node_modules/
 .env
 *.sql
 bun.lockb
+bun.lock
