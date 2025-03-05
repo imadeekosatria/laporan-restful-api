@@ -6,12 +6,12 @@ import { prismaClient } from '../src/app/database'
 
 describe('POST /api/sales', () => {
     beforeEach(async () => {
-        await SalesTest.deleteAll()
+        await SalesTest.delete()
         await UserTest.create()
     })
 
     afterEach(async () => {
-        await SalesTest.deleteAll()
+        await SalesTest.delete()
         await UserTest.delete()
     })
 
@@ -94,13 +94,13 @@ describe('POST /api/sales', () => {
 
 describe('GET /api/sales/:id', () => {
     beforeEach(async () => {
-        await SalesTest.deleteAll()
+        await SalesTest.delete()
         await UserTest.create()
         await SalesTest.create()
     })
 
     afterEach(async () => {
-        await SalesTest.deleteAll()
+        await SalesTest.delete()
         await UserTest.delete()
     })
     it('should success if sales is found', async () => {
@@ -144,13 +144,13 @@ describe('GET /api/sales/:id', () => {
 
 describe('PUT /api/sales/:id', () => {
     beforeEach(async () => {
-        await SalesTest.deleteAll()
+        await SalesTest.delete()
         await UserTest.create()
         await SalesTest.create()
     })
 
     afterEach(async () => {
-        await SalesTest.deleteAll()
+        await SalesTest.delete()
         await UserTest.delete()
     })
 
@@ -241,13 +241,13 @@ describe('PUT /api/sales/:id', () => {
 
 describe('DELETE /api/sales/:id', () => {
     beforeEach(async () => {
-        await SalesTest.deleteAll()
+        await SalesTest.delete()
         await UserTest.create()
         await SalesTest.create()
     })
 
     afterEach(async () => {
-        await SalesTest.deleteAll()
+        await SalesTest.delete()
         await UserTest.delete()
     })
 
@@ -298,13 +298,13 @@ describe('DELETE /api/sales/:id', () => {
 
 describe('GET /api/sales', () => {
     beforeEach(async () => {
-        await SalesTest.deleteAll()
+        await SalesTest.delete()
         await UserTest.create()
         await SalesTest.create()
     })
 
     afterEach(async () => {
-        await SalesTest.deleteAll()
+        await SalesTest.delete()
         await UserTest.delete()
     })
 
@@ -347,7 +347,7 @@ describe('GET /api/sales', () => {
     })
 
     it('should fail if there is no data', async () => {
-        await SalesTest.deleteAll()
+        await SalesTest.delete()
         const response = await app.request('/api/sales', {
             method: 'get',
             headers:{

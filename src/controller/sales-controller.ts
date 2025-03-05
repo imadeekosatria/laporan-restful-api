@@ -8,6 +8,7 @@ export const salesController = new Hono<{ Variables: ApplicationVariables }>()
 
 
 salesController.use(authMiddleware)
+
 salesController.post('/api/sales', async (c) =>{
     const request = await c.req.json() as CreateSaleRequest
     

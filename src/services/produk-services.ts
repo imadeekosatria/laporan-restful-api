@@ -1,5 +1,5 @@
-import { HTTPException } from "hono/http-exception";
-import { prismaClient } from "../app/database";
+import { HTTPException } from "hono/http-exception"
+import { prismaClient } from "../app/database"
 import { CreateProdukRequest, ProdukResponse, toProdukResponse, UpdateProdukRequest } from "../model/produk-model";
 import { ProdukValidation } from "../validation/produk-validation";
 import { Produk } from "@prisma/client";
@@ -54,7 +54,7 @@ export class ProdukServices {
         request = ProdukValidation.UPDATE.parse(request)
         const produkData = await this.produkMustExist(request.id)
         
-        if (!produkData.id) {
+        if (!produkData) {
             throw new HTTPException(404, {
                 message: "Produk is not found"
             })

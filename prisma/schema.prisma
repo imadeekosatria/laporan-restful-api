@@ -30,8 +30,8 @@ model Sales {
   phone String? @db.VarChar(100) 
   address String? @db.VarChar(100)
 
-  Laporan Laporan[]
   Transaksi Transaksi[]
+  Setoran Setoran[]
   @@map("sales") // This is the table name in the database
 }
 
@@ -43,38 +43,39 @@ model Produk {
   stok Int?
   description String? @db.Text 
 
-  Laporan Laporan[]
+  Transaksi Transaksi[]
   @@map("produk") // This is the table name in the database
-}
-
-model Laporan {
-  id String @id @default(uuid())
-  sales_id String
-  produk_id String
-  jumlah Int
-  total Decimal @db.Money
-  transaksi_id String
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-
-  produk Produk @relation(fields: [produk_id], references: [id])
-  sales Sales @relation(fields: [sales_id], references: [id])
-  transaksi Transaksi @relation(fields: [transaksi_id], references: [id])
-
-  @@map("laporan") // This is the table name in the database
 }
 
 model Transaksi {
   id String @id @default(uuid())
   sales_id String
+  produk_id String
+  jumlah Decimal
+  harga Decimal @db.Money
   total Decimal @db.Money
-  setoran Decimal @db.Money
+  setoran_id String
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  sales Sales @relation(fields: [sales_id], references: [id])
-  Laporan Laporan[]
+  produk Produk @relation(fields: [produk_id], references: [id], onDelete: NoAction)
+  sales Sales @relation(fields: [sales_id], references: [id], onDelete: NoAction)
+  Setoran Setoran @relation(fields: [setoran_id], references: [id], onDelete: Cascade)
+
   @@map("transaksi") // This is the table name in the database
+}
+
+model Setoran {
+  id String @id @default(uuid())
+  sales_id String
+  total Decimal @db.Money
+  setor Decimal @db.Money
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  sales Sales @relation(fields: [sales_id], references: [id], onDelete: Cascade)
+  Transaksi Transaksi[]
+  @@map("setoran") // This is the table name in the database
 }
 
 enum Role {
