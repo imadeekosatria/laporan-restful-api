@@ -43,6 +43,6 @@ setoranController.delete('/api/setoran/:id', async (c) => {
     const setoranId = String(c.req.param('id'))
 
     return c.json({
-        data: transaksiId
+        data: setoranId
     })
 })

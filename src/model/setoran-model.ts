@@ -5,6 +5,7 @@ export type CreateSetoranRequest = {
     sales_id: string
     total: Decimal
     setor: Decimal
+    kekurangan?: Decimal
 }
 
 export type UpdateSetoranRequest = {
@@ -12,6 +13,7 @@ export type UpdateSetoranRequest = {
     sales_id: string
     total?: Decimal
     setor?: Decimal
+    kekurangan?: Decimal
 }
 
 export type SetoranResponse = {
@@ -19,6 +21,7 @@ export type SetoranResponse = {
     sales_id: string
     total: Decimal
     setor: Decimal
+    kekurangan?: Decimal
 }
 
 export function toSetoranResponse(setoran: Setoran) : SetoranResponse{
@@ -26,6 +29,6 @@ export function toSetoranResponse(setoran: Setoran) : SetoranResponse{
         id: setoran.id,
         sales_id: setoran.sales_id,
         total: setoran.total,
-        setor: setoran.setor
+        setor: setoran.setor,
     }
 }
