@@ -68,8 +68,9 @@ model Transaksi {
 model Setoran {
   id String @id @default(uuid())
   sales_id String
-  total Decimal @db.Money
-  setor Decimal @db.Money
+  total Decimal @db.Money @default(0)
+  setor Decimal @db.Money @default(0)
+  kekurangan Decimal @db.Money @default(0)
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
