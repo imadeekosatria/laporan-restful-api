@@ -6,12 +6,12 @@ import { prismaClient } from '../src/app/database'
 
 describe('POST /api/sales', () => {
     beforeEach(async () => {
-        await SalesTest.deleteAll()
+        await SalesTest.delete()
         await UserTest.create()
     })
 
     afterEach(async () => {
-        await SalesTest.deleteAll()
+        await SalesTest.delete()
         await UserTest.delete()
     })
 
@@ -94,13 +94,13 @@ describe('POST /api/sales', () => {
 
 describe('GET /api/sales/:id', () => {
     beforeEach(async () => {
-        await SalesTest.deleteAll()
+        await SalesTest.delete()
         await UserTest.create()
         await SalesTest.create()
     })
 
     afterEach(async () => {
-        await SalesTest.deleteAll()
+        await SalesTest.delete()
         await UserTest.delete()
     })
     it('should success if sales is found', async () => {
@@ -144,13 +144,13 @@ describe('GET /api/sales/:id', () => {
 
 describe('PUT /api/sales/:id', () => {
     beforeEach(async () => {
-        await SalesTest.deleteAll()
+        await SalesTest.delete()
         await UserTest.create()
         await SalesTest.create()
     })
 
     afterEach(async () => {
-        await SalesTest.deleteAll()
+        await SalesTest.delete()
         await UserTest.delete()
     })
 
@@ -236,5 +236,128 @@ describe('PUT /api/sales/:id', () => {
         logger.debug(sales)
         logger.debug(body)
         expect(body.data).toBeDefined()
+    })
+})
+
+describe('DELETE /api/sales/:id', () => {
+    beforeEach(async () => {
+        await SalesTest.delete()
+        await UserTest.create()
+        await SalesTest.create()
+    })
+
+    afterEach(async () => {
+        await SalesTest.delete()
+        await UserTest.delete()
+    })
+
+    it('should success delete sales if sales is found', async () => {
+        const sales = await SalesTest.get()
+
+        const response = await app.request('/api/sales/' + sales.id, {
+            method: 'delete',
+            headers:{
+                'Authorization': 'test'
+            }
+        })
+
+        expect(response.status).toBe(200)
+        const body = await response.json()
+        logger.debug(sales)
+        logger.debug(body.data)
+        expect(body.data).toBeTrue()
+
+    })
+
+    it('should be fail if sales is not found', async () => {
+        const response = await app.request('/api/sales/1', {
+            method: 'delete',
+            headers:{
+                'Authorization': 'test'
+            },
+        })
+
+        expect(response.status).toBe(404)
+        const body = await response.json()
+        logger.debug(body.errors)
+        expect(body.errors).toBeDefined()
+    })
+
+    it('should be fail if not authorized', async () => {
+        const sales = await SalesTest.get()
+        const response = await app.request('/api/sales/'+ sales.id, {
+            method: 'delete'
+        })
+
+        expect(response.status).toBe(401)
+        const body = await response.json()
+        logger.debug(body.errors)
+        expect(body.errors).toBeDefined()
+    })
+})
+
+describe('GET /api/sales', () => {
+    beforeEach(async () => {
+        await SalesTest.delete()
+        await UserTest.create()
+        await SalesTest.create()
+    })
+
+    afterEach(async () => {
+        await SalesTest.delete()
+        await UserTest.delete()
+    })
+
+    it('should success get all sales', async () => {
+        await prismaClient.sales.createMany({
+            data: [
+            {
+                name: "test1",
+                email: "test1@mail.com",
+            },
+            {
+                name: "test2",
+                email: "test2@mail.com",
+            },
+            {
+                name: "test3",
+                email: "test3@mail.com",
+            },
+            {
+                name: "test4",
+                email: "test4@mail.com",
+            },
+            {
+                name: "test5",
+                email: "test5@mail.com",
+            }
+            ]
+        })
+        const response = await app.request('/api/sales', {
+            method: 'get',
+            headers:{
+                'Authorization': 'test'
+            }
+        })
+
+        expect(response.status).toBe(200)
+        const body = await response.json()
+        logger.debug(body)
+        expect(body.data).toBeDefined()
+    })
+
+    it('should fail if there is no data', async () => {
+        await SalesTest.delete()
+        const response = await app.request('/api/sales', {
+            method: 'get',
+            headers:{
+                'Authorization': 'test'
+            }
+        })
+
+        expect(response.status).toBe(404)
+        const body = await response.json()
+        logger.debug(body)
+        expect(body.errors).toBeDefined()
     })
 })

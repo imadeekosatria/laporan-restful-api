@@ -1,0 +1,39 @@
+{
+    "transaksi":[
+        {
+            "sales_id": "1",
+            "produk_id": "1",
+            "jumlah": 10,
+            "total": 100000
+        },
+        {
+            "sales_id": "1",
+            "produk_id": "2",
+            "jumlah": 5,
+            "total": 50000
+        },
+        {
+            "sales_id": "1",
+            "produk_id": "3",
+            "jumlah": 8,
+            "total": 80000
+        },
+        {
+            "sales_id": "1",
+            "produk_id": "4",
+            "jumlah": 12,
+            "total": 120000
+        },
+        {
+            "sales_id": "1",
+            "produk_id": "5",
+            "jumlah": 7,
+            "total": 70000
+        }
+    ],
+    "setoran":{
+        "sales_id": "1",
+        "total": 100000,
+        "setoran": 100000
+    }
+}
