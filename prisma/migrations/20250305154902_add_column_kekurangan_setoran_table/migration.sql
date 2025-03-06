@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "setoran" ADD COLUMN     "kekurangan" MONEY NOT NULL DEFAULT 0,
+ALTER COLUMN "total" SET DEFAULT 0,
+ALTER COLUMN "setor" SET DEFAULT 0;

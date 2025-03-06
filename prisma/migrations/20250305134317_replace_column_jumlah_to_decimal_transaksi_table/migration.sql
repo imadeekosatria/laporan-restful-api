@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "laporan" ALTER COLUMN "jumlah" SET DATA TYPE DECIMAL(65,30);
