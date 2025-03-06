@@ -170,6 +170,44 @@ export class SetoranTest{
         })
     }
 
+    static async createBatch(){
+        const sales = await SalesTest.get()
+        await prismaClient.setoran.createMany({
+            data: [
+            {
+            sales_id: sales.id,
+            total: 1000000,
+            setor: 900000,
+            kekurangan: 100000
+            },
+            {
+            sales_id: sales.id,
+            total: 2000000,
+            setor: 1800000,
+            kekurangan: 200000
+            },
+            {
+            sales_id: sales.id,
+            total: 1500000,
+            setor: 1400000,
+            kekurangan: 100000
+            },
+            {
+            sales_id: sales.id,
+            total: 2500000,
+            setor: 2300000,
+            kekurangan: 200000
+            },
+            {
+            sales_id: sales.id,
+            total: 3000000,
+            setor: 2900000,
+            kekurangan: 100000
+            },
+            ]
+        })
+    }
+
     static async delete(){
         const sales = await SalesTest.get()
         await prismaClient.setoran.deleteMany({

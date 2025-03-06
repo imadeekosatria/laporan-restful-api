@@ -21,7 +21,7 @@ export type SetoranResponse = {
     sales_id: string
     total: Decimal
     setor: Decimal
-    kekurangan?: Decimal
+    kekurangan: Decimal
 }
 
 export function toSetoranResponse(setoran: Setoran) : SetoranResponse{
@@ -30,5 +30,6 @@ export function toSetoranResponse(setoran: Setoran) : SetoranResponse{
         sales_id: setoran.sales_id,
         total: setoran.total,
         setor: setoran.setor,
+        kekurangan: setoran.kekurangan
     }
 }

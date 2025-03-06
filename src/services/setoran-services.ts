@@ -34,6 +34,23 @@ export class SetoranServices {
         return setorans.map(toSetoranResponse)
     }
 
+    static async getBySalesId(salesId: string): Promise<SetoranResponse[]> {
+        const id = SetoranValidation.GET.parse(salesId)
+        const setoranData = await prismaClient.setoran.findMany({
+            where: {
+                sales_id: id
+            }
+        })
+
+        if (setoranData.length === 0) {
+            throw new HTTPException(404, {
+                message: "Setoran tidak ditemukan"
+            })
+        }
+
+        return setoranData.map(toSetoranResponse)
+    }
+
     static async update(request: Setoran): Promise<SetoranResponse> {
         request = SetoranValidation.UPDATE.parse(request)
 
