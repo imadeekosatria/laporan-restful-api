@@ -132,6 +132,27 @@ describe('POST /api/setoran', () => {
         expect(body.errors).toBeDefined
     })
 
+    it('should reject if setor is less than total and kekurangan is not provided', async () => {
+        const sales = await SalesTest.get()
+
+        const response = await app.request('/api/setoran', {
+            method: 'POST',
+            headers: {
+                'Authorization': 'test'
+            },
+            body: JSON.stringify({
+                sales_id: sales.id,
+                total: 100000,
+                setor: 50000
+            })
+        })
+
+        expect(response.status).toBe(400)
+        const body = await response.json()
+        logger.debug(body)
+        expect(body.errors).toBeDefined()
+    })
+
     it('should reject if request is not authorized', async () => {
         const sales = await SalesTest.get()
 
@@ -231,10 +252,10 @@ describe('PUT /api/setoran', () => {
         await SalesTest.delete()
     })
 
-    it('should accept if request is valid', async () => {
+    it('should reject if kekurangan updated and both setor and total are same value', async () => {
         const sales = await SalesTest.get()
         const setoran = await SetoranTest.get()
-        console.log(setoran)
+
         const response = await app.request(`/api/setoran/${setoran.id}`, {
             method: 'PUT',
             headers: {
@@ -242,13 +263,81 @@ describe('PUT /api/setoran', () => {
             },
             body: JSON.stringify({
                 sales_id: sales.id,
-                setor: 100000
+                kekurangan: 50000
             })
         })
 
-        // expect(response.status).toBe(200)
+        expect(response.status).toBe(400)
         const body = await response.json()
         logger.debug(body)
-        // expect(body.data).toBeDefined()
+        expect(body.errors).toBeDefined()
+    })
+
+    it('should reject if kekurangan updated and setor is greater than total but kekurangan value is wrong', async () => {
+        const sales = await SalesTest.get()
+        const setoran = await SetoranTest.get()
+
+        const response = await app.request(`/api/setoran/${setoran.id}`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': 'test'
+            },
+            body: JSON.stringify({
+                sales_id: sales.id,
+                total: 100000,
+                setor: 200000,
+                kekurangan: 50000
+            })
+        })
+
+        expect(response.status).toBe(400)
+        const body = await response.json()
+        logger.debug(body)
+        expect(body.errors).toBeDefined()
+    })
+
+    it('should accept if kekurangan updated and setor is less than total', async () => {
+        const sales = await SalesTest.get()
+        const setoran = await SetoranTest.get()
+
+        const response = await app.request(`/api/setoran/${setoran.id}`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': 'test'
+            },
+            body: JSON.stringify({
+                sales_id: sales.id,
+                total: 100000,
+                setor: 50000,
+                kekurangan: 50000
+            })
+        })
+
+        expect(response.status).toBe(200)
+        const body = await response.json()
+        logger.debug(body)
+        expect(body.data).toBeDefined()
+    })
+
+    it('should accept if setor and total are updated', async () => {
+        const sales = await SalesTest.get()
+        const setoran = await SetoranTest.get()
+
+        const response = await app.request(`/api/setoran/${setoran.id}`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': 'test'
+            },
+            body: JSON.stringify({
+                sales_id: sales.id,
+                total: 100000,
+                setor: 50000
+            })
+        })
+
+        expect(response.status).toBe(200)
+        const body = await response.json()
+        logger.debug(body)
+        expect(body.data).toBeDefined()
     })
 })

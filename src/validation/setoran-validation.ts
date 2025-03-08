@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client"
 import { z, ZodType } from "zod"
 
 export class SetoranValidation{
@@ -8,7 +9,15 @@ export class SetoranValidation{
         kekurangan: z.number().min(1).positive().optional()
     }).refine(data => data.total >= data.setor, {
         message: 'Total harus lebih besar atau sama dengan setoran',
-        path: ['total']
+        path: ['total', 'setor']
+    }).refine(data => {
+        if (data.setor < data.total && data.kekurangan === undefined) {
+            return false;
+        }
+        return true;
+    }, {
+        message: 'Kekurangan harus ditambahkan jika setoran lebih kecil dari total',
+        path: ['kekurangan']
     })
 
     static readonly UPDATE : ZodType = z.object({
@@ -17,13 +26,27 @@ export class SetoranValidation{
         total: z.number().min(1).positive().optional(),
         setor: z.number().min(1).positive().optional(),
         kekurangan: z.number().min(1).positive().optional()
-    }).refine(data=> {
+    }).refine(data => {
         if (data.total !== undefined && data.setor !== undefined) {
-            return data.total >= data.setor
+            if (data.total < data.setor) {
+                return false
+            }
         }
-    },{
-        message: 'Total harus lebih besar atau sama dengan setoran',
-        path: ['total']
+        if (data.kekurangan !== undefined) {
+            if (data.total === undefined || data.setor === undefined || data.setor >= data.total) {
+                return false
+            }
+            const total = new Prisma.Decimal(data.total)
+            const setor = new Prisma.Decimal(data.setor)
+            const kekurangan = new Prisma.Decimal(data.kekurangan)
+            if (!total.minus(setor).equals(kekurangan)) {
+                return false
+            }
+        }
+        return true
+    }, {
+        message: 'Total harus lebih besar atau sama dengan setoran dan setoran harus lebih kecil dari total jika kekurangan diupdate',
+        path: ['total', 'setor', 'kekurangan']
     })
 
     static readonly GET : ZodType = z.string().min(1)
