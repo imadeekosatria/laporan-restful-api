@@ -1,5 +1,5 @@
 import { HTTPException } from "hono/http-exception"
-import { CreateTransaksiRequest, toTransaksiResponse, TransaksiResponse } from "../model/transaksi-model"
+import { CreateTransaksiRequest, toTransaksiResponse, toTransaksiResponses, TransaksiResponse } from "../model/transaksi-model"
 import { TransaksiValidation } from "../validation/transaksi-validation"
 
 import { prismaClient } from "../app/database"
@@ -9,12 +9,12 @@ export class TransaksiServices {
 
         const transaksi = TransaksiValidation.CREATE_ARRAY.parse(request)
 
-        const response = await prismaClient.transaksi.createMany({
+        const response = await prismaClient.transaksi.createManyAndReturn({
             data: transaksi
         })
 
         
-        return response
+        return toTransaksiResponses(response)
     }
     
     static async get(laporanId: string): Promise<any> {

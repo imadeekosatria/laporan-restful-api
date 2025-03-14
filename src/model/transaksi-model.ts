@@ -7,6 +7,7 @@ export type CreateTransaksiRequest = {
     harga: Decimal
     jumlah: Decimal
     total: Decimal
+    setoran_id?: string
 }
 
 export type UpdateTransaksiRequest = {
@@ -17,6 +18,7 @@ export type UpdateTransaksiRequest = {
     jumlah?: Decimal
     total?: Decimal
     transaksi_id: string
+    setoran_id?: string
 }
 
 export type TransaksiResponse = {
@@ -27,6 +29,7 @@ export type TransaksiResponse = {
     jumlah: Decimal
     total: Decimal
     transaksi_id: string
+    setoran_id?: string
 }
 
 export function toTransaksiResponse(transaksi: Transaksi) : TransaksiResponse{
@@ -37,6 +40,17 @@ export function toTransaksiResponse(transaksi: Transaksi) : TransaksiResponse{
         harga: transaksi.harga,
         jumlah: transaksi.jumlah,
         total: transaksi.total,
-        transaksi_id: transaksi.setoran_id
+        transaksi_id: transaksi.setoran_id,
+        setoran_id: transaksi.setoran_id
+    }
+}
+
+export type TransaksiResponses = {
+    data: TransaksiResponse[]
+}
+
+export function toTransaksiResponses(transaksis: Transaksi[]): TransaksiResponses {
+    return {
+        data: transaksis.map(toTransaksiResponse)
     }
 }

@@ -3,6 +3,8 @@ import { ApplicationVariables } from "../model/app-model";
 import { authMiddleware } from "../middleware/auth-middleware";
 import { CreateSetoranRequest } from "../model/setoran-model";
 import { SetoranServices } from "../services/setoran-services";
+import { TransaksiServices } from "../services/transaksi-services";
+import { CreateTransaksiRequest } from "../model/transaksi-model";
 
 export const setoranController = new Hono<{ Variables: ApplicationVariables}>()
 
@@ -31,12 +33,27 @@ setoranController.get('/api/setoran/:id', async (c) => {
 })
 
 setoranController.post('/api/setoran', async (c) => {
-    const request = await c.req.json() as CreateSetoranRequest
+    const request = await c.req.json() 
 
-    const response = await SetoranServices.create(request)
+    const setoran = request.setoran as CreateSetoranRequest
+
+    const transaksi = request.transaksi as CreateTransaksiRequest[]
+
+    const response_setoran = await SetoranServices.create(setoran)
+
+    const setoran_id = response_setoran.id
+
+    transaksi.forEach(t => {
+        t.setoran_id = setoran_id
+    })
+
+    const response_transaksi = await TransaksiServices.create(transaksi)
 
     return c.json({
-        data: response
+        data: {
+            setoran: response_setoran,
+            transaksi: response_transaksi
+        }
     })
 })
 

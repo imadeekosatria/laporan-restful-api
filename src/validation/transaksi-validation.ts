@@ -7,7 +7,7 @@ export class TransaksiValidation{
         harga: z.number().min(1).positive(),
         jumlah: z.number().min(1).positive(),
         total: z.number().min(1).positive(),
-        setoran_id: z.string().min(1),
+        setoran_id: z.string().min(1).optional(),
     })
 
     static readonly CREATE_ARRAY : ZodType = z.array(TransaksiValidation.CREATE)
