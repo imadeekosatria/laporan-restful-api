@@ -62,19 +62,29 @@ setoranController.put('/api/setoran/:id', async (c) => {
 
     const request = await c.req.json()
 
-    request.id = setoranId
+    const setoran = request.setoran
 
-    const response = await SetoranServices.update(request)
+    const transaksi = request.transaksi
+
+    const transaksi_response = await TransaksiServices.update(setoranId, transaksi)
+    
+    setoran.id = setoranId
+
+    const setoran_response = await SetoranServices.update(setoran)
 
     return c.json({
-        data: response
+        data: {
+            setoran: setoran_response,
+            transaksi: transaksi_response
+        }
     })
 })
 
 setoranController.delete('/api/setoran/:id', async (c) => {
     const setoranId = String(c.req.param('id'))
+    const response = await SetoranServices.delete(setoranId)
 
     return c.json({
-        data: setoranId
+        data: response
     })
 })

@@ -1,8 +1,9 @@
 import { HTTPException } from "hono/http-exception"
-import { CreateSetoranRequest, SetoranResponse, toSetoranResponse } from "../model/setoran-model";
+import { CreateSetoranRequest, SetoranResponse, SetoranTransaksiResponse, toSetoranResponse, toSetoranTransaksiResponse } from "../model/setoran-model";
 import { SetoranValidation } from "../validation/setoran-validation";
 import { prismaClient } from "../app/database";
 import { Setoran,  } from "@prisma/client";
+import { TransaksiServices } from "./transaksi-services";
 
 export class SetoranServices {
     static async create(request: CreateSetoranRequest): Promise<SetoranResponse> {
@@ -15,11 +16,12 @@ export class SetoranServices {
         return toSetoranResponse(setoran) 
     }
 
-    static async get(setoranId: string): Promise<SetoranResponse> {
+    static async get(setoranId: string): Promise<SetoranTransaksiResponse> {
         const id = SetoranValidation.GET.parse(setoranId)
-        const setoranData = await this.setoranMustExist(id)
+        const setoran = await this.setoranMustExist(id)
+        const transaksi = await TransaksiServices.getAll(id)
 
-        return toSetoranResponse(setoranData)
+        return toSetoranTransaksiResponse(setoran, transaksi)
     }
 
     static async getAll(): Promise<SetoranResponse[]> {
@@ -56,12 +58,6 @@ export class SetoranServices {
 
         const setoranData = await this.setoranMustExist(request.id)
 
-        if (!setoranData) {
-            throw new HTTPException(404, {
-                message: "Setoran tidak ditemukan"
-            })
-        }
-
         const response = await prismaClient.setoran.update({
             where: {
                 id: setoranData.id
@@ -81,6 +77,8 @@ export class SetoranServices {
                 message: "Setoran tidak ditemukan"
             })
         }
+        
+        TransaksiServices.delete(id)
 
         await prismaClient.setoran.delete({
             where: {
@@ -92,7 +90,7 @@ export class SetoranServices {
     }
 
     static async setoranMustExist(id: string): Promise<Setoran> {
-        const setoranData = await prismaClient.setoran.findFirst({
+        const setoranData = await prismaClient.setoran.findUnique({
             where: {
                 id: id
             }

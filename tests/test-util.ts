@@ -156,6 +156,49 @@ export class TransaksiTest{
             }
         })
     }
+
+    static async createBatch(){
+        const produk = await ProdukTest.getAll()
+        const sales = await SalesTest.get()
+        const setoran = await SetoranTest.get()
+        await prismaClient.transaksi.createManyAndReturn({
+            data: [
+                {
+                    sales_id: sales.id,
+                    produk_id: produk[0].id,
+                    harga: produk[0].harga,
+                    jumlah: 1,
+                    total: produk[0].harga,
+                    setoran_id: setoran.id
+                },
+                {
+                    sales_id: sales.id,
+                    produk_id: produk[1].id,
+                    harga: produk[1].harga,
+                    jumlah: 1,
+                    total: produk[1].harga,
+                    setoran_id: setoran.id
+                },
+                {
+                    sales_id: sales.id,
+                    produk_id: produk[2].id,
+                    harga: produk[2].harga,
+                    jumlah: 1,
+                    total: produk[2].harga,
+                    setoran_id: setoran.id
+                }
+            ]
+        })
+    }
+
+    static async getAll(){
+        const sales = await SalesTest.get()
+        return await prismaClient.transaksi.findMany({
+            where: {
+                sales_id: sales.id
+            }
+        })
+    }
 }
 
 export class SetoranTest{
