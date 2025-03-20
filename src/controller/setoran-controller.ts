@@ -52,7 +52,7 @@ setoranController.post('/api/setoran', async (c) => {
     return c.json({
         data: {
             setoran: response_setoran,
-            transaksi: response_transaksi
+            transaksi: response_transaksi.data
         }
     })
 })
