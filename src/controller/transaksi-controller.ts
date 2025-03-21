@@ -8,45 +8,45 @@ export const transaksiController = new Hono<{ Variables: ApplicationVariables}>
 
 transaksiController.use(authMiddleware)
 
-transaksiController.get('/api/transaksi', async (c) => {
-    const response = TransaksiServices.getAll()
-    return c.json({
-        data: response
-    })
-})
+// transaksiController.get('/api/transaksi', async (c) => {
+//     const response = TransaksiServices.getAll()
+//     return c.json({
+//         data: response
+//     })
+// })
 
 transaksiController.get('/api/transaksi/:id', async (c) => {
     const transaksiId = String(c.req.param('id'))
 
-    const response = TransaksiServices.get(transaksiId)
+    const response = await TransaksiServices.get(transaksiId)
 
     return c.json({
         data: response
     })
 })
 
-transaksiController.post('/api/transaksi', async (c) => {
-    const request = await c.req.json() as CreateTransaksiRequest[]
+// transaksiController.post('/api/transaksi', async (c) => {
+//     const request = await c.req.json() as CreateTransaksiRequest[]
 
-    const response = TransaksiServices.create(request)
-    return c.json({
-        data: response
-    })
-})
+//     const response = TransaksiServices.create(request)
+//     return c.json({
+//         data: response
+//     })
+// })
 
-transaksiController.put('/api/transaksi/:id', async (c) => {
-    const transaksiId = String(c.req.param('id'))
+// transaksiController.put('/api/transaksi/:id', async (c) => {
+//     const transaksiId = String(c.req.param('id'))
 
-    const request = await c.req.json() as UpdateTransaksiRequest
+//     const request = await c.req.json() as UpdateTransaksiRequest
 
-    request.id = transaksiId
+//     request.id = transaksiId
 
-    const response = TransaksiServices.update(request)
+//     const response = TransaksiServices.update(request)
 
-    return c.json({
-        data: response
-    })
-})
+//     return c.json({
+//         data: response
+//     })
+// })
 
 transaksiController.delete('/api/transaksi/:id', async (c) => {
     const transaksiId = String(c.req.param('id'))

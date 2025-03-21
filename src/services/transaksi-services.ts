@@ -107,7 +107,7 @@ export class TransaksiServices {
 
     static async get(transaksi: string): Promise<TransaksiResponse> {
         const id = TransaksiValidation.GET.parse(transaksi)
-        const transaksiData = await prismaClient.transaksi.findUnique({
+        const transaksiData = await prismaClient.transaksi.findUniqueOrThrow({
             where: {
                 id: id
             }
