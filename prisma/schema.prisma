@@ -20,7 +20,10 @@ model User {
   name      String?  @db.VarChar(100)
   role      Role    @default(SUPER_ADMIN)
   token     String? @db.VarChar(100)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt @default(now())
 
+  UserSales UserSales[]
   @@map("users") // This is the table name in the database
 }
 
@@ -30,10 +33,26 @@ model Sales {
   email String? @db.VarChar(100) @unique
   phone String? @db.VarChar(100) 
   address String? @db.VarChar(100)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt @default(now())
 
   Transaksi Transaksi[]
   Setoran Setoran[]
+  UserSales UserSales[]
   @@map("sales") // This is the table name in the database
+}
+
+model UserSales {
+  id String @id @default(uuid())
+  user_id String
+  sales_id String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  user User @relation(fields: [user_id], references: [username], onDelete: Cascade)
+  sales Sales @relation(fields: [sales_id], references: [id], onDelete: Cascade)
+
+  @@map("user_sales") // This is the table name in the database
 }
 
 model Produk {

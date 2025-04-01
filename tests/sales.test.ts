@@ -90,6 +90,27 @@ describe('POST /api/sales', () => {
         logger.debug(body)
         expect(body.errors).toBeDefined()
     })
+
+    it('should fail if user is not SUPER_ADMIN', async () => {
+        await UserTest.delete()
+        await UserTest.createadmin()
+        const response = await app.request('/api/sales', {
+            method: 'post',
+            headers:{
+                'Authentication': 'test'
+            },
+            body: JSON.stringify({
+                name: "test",
+                email: "test@mail.com",
+                phone: "08123456789",
+                address: "jl. test no. 19",
+            })
+        })
+        expect(response.status).toBe(401)
+        const body = await response.json()
+        logger.debug(body)
+        expect(body.errors).toBeDefined()
+    })
 })
 
 describe('GET /api/sales/:id', () => {

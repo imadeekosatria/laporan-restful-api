@@ -1,8 +1,9 @@
-import { Sales } from "@prisma/client";
+import { Sales, User } from "@prisma/client";
 import { CreateSaleRequest, SaleResponse, toSalesResponse, UpdateSaleRequest } from "../model/sales-model";
 import { SalesValidation } from "../validation/sales-validation";
 import { prismaClient } from "../app/database";
 import { HTTPException } from "hono/http-exception";
+import { toUserSalesResponses, UserSalesResponses } from "../model/user-sales-model";
 
 export class SalesServices{
 
@@ -78,16 +79,32 @@ export class SalesServices{
         return toSalesResponse(salesData)
     }
 
-    static async getAll(): Promise<SaleResponse[]>{
-        const salesData = await prismaClient.sales.findMany()
+    static async getAll(user: User): Promise<SaleResponse[] | UserSalesResponses>{
+        if (user.role === 'SUPER_ADMIN') {
+            const salesData = await prismaClient.sales.findMany()
+            if (salesData.length === 0) {
+                throw new HTTPException(404, {
+                    message: "No sales records found"
+                });
+            }
 
-        if (salesData.length === 0) {
-            throw new HTTPException(404, {
-                message: "No sales records found"
-            });
+            return salesData.map(toSalesResponse)
+        }else{
+            const userSalesData = await prismaClient.userSales.findMany({
+                where:{
+                    user_id: user.username
+                },
+            })
+
+            if (userSalesData.length === 0) {
+                throw new HTTPException(404, {
+                    message: "No sales records found"
+                });
+            }
+            
+            return toUserSalesResponses(userSalesData)
         }
         
-        return salesData.map(toSalesResponse)
     }
 
     static async delete(id: string): Promise<boolean>{

@@ -3,7 +3,7 @@ import { Role, User } from "@prisma/client";
 export type RegisterUserRequest = {
     username: string
     password: string
-    name: string
+    name?: string
 }
 
 export type LoginUserRequest = {
@@ -18,7 +18,7 @@ export type UpdateUserRequest = {
 
 export type UserResponse = {
     username: string
-    name: string
+    name: string | null
     role: Role
     token?: string
 }
