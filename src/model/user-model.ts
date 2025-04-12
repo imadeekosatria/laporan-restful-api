@@ -21,12 +21,14 @@ export type UserResponse = {
     name: string | null
     role: Role
     token?: string
+    authenticated?: boolean
 }
 
 export function toUserResponse(user: User): UserResponse{
     return {
         name: user.name,
         username: user.username,
-        role: user.role
+        role: user.role,
+        authenticated: user.authenticated,
     }
 }

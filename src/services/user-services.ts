@@ -60,7 +60,8 @@ export class UserServices{
                 username: request.username
             },
             data: {
-                token: crypto.randomUUID()
+                token: crypto.randomUUID(),
+                authenticated: true
             }
         })
 
