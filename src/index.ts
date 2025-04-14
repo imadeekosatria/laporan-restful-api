@@ -1,4 +1,5 @@
 import { Hono } from 'hono'
+import { cors } from 'hono/cors'
 import { HTTPException } from 'hono/http-exception'
 import { ZodError } from 'zod'
 import { userController } from './controller/user-controller'
@@ -8,6 +9,14 @@ import { transaksiController } from './controller/transaksi-controller'
 import { setoranController } from './controller/setoran-controller'
 
 const app = new Hono()
+
+app.use('*', cors({
+  origin: '*',
+  allowMethods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowHeaders: ['Content-Type'],
+  maxAge: 600,
+  credentials: true,
+}))
 
 app.get('/', (c) => {
   return c.text('Hello Hono!')
