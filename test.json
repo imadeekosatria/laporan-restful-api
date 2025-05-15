@@ -1,0 +1,42 @@
+{
+    "level": "debug",
+    "message": {
+        "data": {
+            "data": [
+                {
+                    "id": "2be2235f-c1db-450c-90df-12d113caa984",
+                    "sales": {
+                        "address": "jl. test no. 19",
+                        "email": "test1@mail.com",
+                        "id": "1",
+                        "name": "test1",
+                        "phone": "08123456789"
+                    },
+                    "user_id": "test"
+                },
+                {
+                    "id": "f5068b53-6978-460a-bb8e-e7966aaa9c08",
+                    "sales": {
+                        "address": "jl. test no. 20",
+                        "email": "test2@mail.com",
+                        "id": "2",
+                        "name": "test2",
+                        "phone": "08123456788"
+                    },
+                    "user_id": "test"
+                },
+                {
+                    "id": "6b8593d6-f710-48fb-ad33-969ea3f07567",
+                    "sales": {
+                        "address": "jl. test no. 21",
+                        "email": "test3@mail.com",
+                        "id": "3",
+                        "name": "test3",
+                        "phone": "08123456787"
+                    },
+                    "user_id": "test"
+                }
+            ]
+        }
+    }
+}
