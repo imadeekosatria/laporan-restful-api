@@ -321,39 +321,15 @@ describe('GET /api/sales', () => {
     beforeEach(async () => {
         await SalesTest.delete()
         await UserTest.create()
-        await SalesTest.create()
+        await SalesTest.createBatchWithUserRelation()
     })
 
     afterEach(async () => {
-        await SalesTest.delete()
         await UserTest.delete()
+        await SalesTest.delete()
     })
 
     it('should success get all sales', async () => {
-        await prismaClient.sales.createMany({
-            data: [
-            {
-                name: "test1",
-                email: "test1@mail.com",
-            },
-            {
-                name: "test2",
-                email: "test2@mail.com",
-            },
-            {
-                name: "test3",
-                email: "test3@mail.com",
-            },
-            {
-                name: "test4",
-                email: "test4@mail.com",
-            },
-            {
-                name: "test5",
-                email: "test5@mail.com",
-            }
-            ]
-        })
         const response = await app.request('/api/sales', {
             method: 'get',
             headers:{
@@ -380,5 +356,24 @@ describe('GET /api/sales', () => {
         const body = await response.json()
         logger.debug(body)
         expect(body.errors).toBeDefined()
+    })
+
+    it('should success to get all sales for admin user', async () => {
+        await UserTest.delete()
+        await UserTest.createadmin()
+        await SalesTest.delete()
+        await SalesTest.createBatchWithUserRelation()
+
+        
+        const response = await app.request('/api/sales', {
+            method: 'get',
+            headers:{
+                'Authorization': 'test'
+            }
+        })
+        expect(response.status).toBe(200)
+        const body = await response.json()
+        logger.debug(body)
+        expect(body.data).toBeDefined()
     })
 })

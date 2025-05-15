@@ -77,6 +77,56 @@ export class SalesTest{
         })
     }
 
+    static async createBatchWithUserRelation(){
+        await prismaClient.sales.createMany({
+            data: [
+                {
+                    id: "1",
+                    name: "test1",
+                    email: "test1@mail.com",
+                    phone: "08123456789",
+                    address: "jl. test no. 19"
+                },
+                {
+                    id: "2",
+                    name: "test2",
+                    email: "test2@mail.com",
+                    phone: "08123456788",
+                    address: "jl. test no. 20"
+                },
+                {
+                    id: "3",
+                    name: "test3",
+                    email: "test3@mail.com",
+                    phone: "08123456787",
+                    address: "jl. test no. 21"
+                }
+            ]
+        })
+        const user = await prismaClient.user.findFirstOrThrow({
+            where: {
+                username: "test"
+            }
+        })
+
+        await prismaClient.userSales.createMany({
+            data: [
+                {
+                    user_id: user.username,
+                    sales_id: "1"
+                },
+                {
+                    user_id: user.username,
+                    sales_id: "2"
+                },
+                {
+                    user_id: user.username,
+                    sales_id: "3"
+                }
+            ]
+        })
+    }
+
     static async delete(){
         await prismaClient.sales.deleteMany({
             where: {

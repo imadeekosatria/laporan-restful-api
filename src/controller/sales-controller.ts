@@ -1,5 +1,5 @@
 import { Hono } from "hono"
-import { CreateSaleRequest, UpdateSaleRequest } from "../model/sales-model"
+import { CreateSalesRequest, UpdateSalesRequest } from "../model/sales-model"
 import { SalesServices } from "../services/sales-services"
 import { authMiddleware, superAdminMiddleware } from "../middleware/auth-middleware"
 import { ApplicationVariables } from "../model/app-model"
@@ -12,7 +12,7 @@ salesController.use(authMiddleware)
 
 salesController.post('/api/sales', superAdminMiddleware, async (c) =>{
 
-    const request = await c.req.json() as CreateSaleRequest
+    const request = await c.req.json() as CreateSalesRequest
     
     const response = await SalesServices.create(request)
     
@@ -43,7 +43,7 @@ salesController.get('/api/sales', async (c) =>{
 salesController.put('/api/sales/:id', superAdminMiddleware, async (c) =>{
     const salesId = String(c.req.param('id'))
     
-    const request = await c.req.json() as UpdateSaleRequest
+    const request = await c.req.json() as UpdateSalesRequest
     
     request.id = salesId
     

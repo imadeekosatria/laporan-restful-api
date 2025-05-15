@@ -1,13 +1,13 @@
 import { Sales, User } from "@prisma/client";
-import { CreateSaleRequest, SaleResponse, toSalesResponse, UpdateSaleRequest } from "../model/sales-model";
+import { CreateSalesRequest, SalesResponse, toSalesResponse, toSalesResponses, UpdateSalesRequest } from "../model/sales-model";
 import { SalesValidation } from "../validation/sales-validation";
 import { prismaClient } from "../app/database";
 import { HTTPException } from "hono/http-exception";
-import { toUserSalesResponses, UserSalesResponses } from "../model/user-sales-model";
+import { toUserSalesResponses, toUserSalesResponseWithUser, toUserSalesResponseWithUsers, UserSalesResponses } from "../model/user-sales-model";
 
 export class SalesServices{
 
-    static async create(request: CreateSaleRequest): Promise<SaleResponse>{
+    static async create(request: CreateSalesRequest): Promise<SalesResponse>{
         request = SalesValidation.CREATE.parse(request)
         await this.emailAlreadyExist(undefined, request.email)
 
@@ -18,7 +18,11 @@ export class SalesServices{
         return toSalesResponse(sales)
     }
 
-    static async update(request: UpdateSaleRequest): Promise<SaleResponse>{
+    static async addUserSales(userId: string, salesId: string): Promise<void>{
+
+    }
+
+    static async update(request: UpdateSalesRequest): Promise<SalesResponse>{
         request = SalesValidation.UPDATE.parse(request)
         const existingSale = await this.salesMustExist(request.id)
 
@@ -72,14 +76,14 @@ export class SalesServices{
 
     }
     
-    static async get(id: string): Promise<SaleResponse>{
+    static async get(id: string): Promise<SalesResponse>{
         id = SalesValidation.GET.parse(id)
         const salesData = await this.salesMustExist(id)
 
         return toSalesResponse(salesData)
     }
 
-    static async getAll(user: User): Promise<SaleResponse[] | UserSalesResponses>{
+    static async getAll(user: User): Promise<any>{
         if (user.role === 'SUPER_ADMIN') {
             const salesData = await prismaClient.sales.findMany()
             if (salesData.length === 0) {
@@ -87,22 +91,23 @@ export class SalesServices{
                     message: "No sales records found"
                 });
             }
-
-            return salesData.map(toSalesResponse)
+            return toSalesResponses(salesData)
         }else{
             const userSalesData = await prismaClient.userSales.findMany({
                 where:{
                     user_id: user.username
                 },
+                include:{
+                    sales: true
+                }
             })
-
             if (userSalesData.length === 0) {
                 throw new HTTPException(404, {
                     message: "No sales records found"
                 });
             }
             
-            return toUserSalesResponses(userSalesData)
+            return toUserSalesResponseWithUsers(userSalesData)
         }
         
     }
