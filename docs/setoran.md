@@ -147,6 +147,58 @@ Response body (Failed):
     "errors":"Unauthorized"
 }
 ```
+
+## Get Laporan by sales_id
+
+Endpoint : GET /api/setoran?{sales_id}
+
+Request Header:
+- Authorization : token
+
+Response Body (Sussces):
+
+```json
+{
+    "data": [
+        {
+            "id": "1e3ef90a-28bc-4716-a200-6beb490b64b7",
+            "kekurangan": "100000",
+            "sales_id": "6d9f10b5-f690-41da-9c0d-44d05caca8d9",
+            "setor": "900000",
+            "total": "1000000"
+        },
+        {
+            "id": "bb29007b-fcf7-43ed-bdf8-68ae344b33e5",
+            "kekurangan": "200000",
+            "sales_id": "6d9f10b5-f690-41da-9c0d-44d05caca8d9",
+            "setor": "1800000",
+            "total": "2000000"
+        },
+        {
+            "id": "26c3b5f2-bbb8-4b78-b717-40c5bf661cce",
+            "kekurangan": "100000",
+            "sales_id": "6d9f10b5-f690-41da-9c0d-44d05caca8d9",
+            "setor": "1400000",
+            "total": "1500000"
+        },
+        {
+            "id": "3a5e378b-b3eb-4f20-ab3f-e04c6ab05e27",
+            "kekurangan": "200000",
+            "sales_id": "6d9f10b5-f690-41da-9c0d-44d05caca8d9",
+            "setor": "2300000",
+            "total": "2500000"
+        },
+        {
+            "id": "a47fbe62-4950-4248-b167-c60e9588bfea",
+            "kekurangan": "100000",
+            "sales_id": "6d9f10b5-f690-41da-9c0d-44d05caca8d9",
+            "setor": "2900000",
+            "total": "3000000"
+        }
+    ]
+}
+```
+
 ## Get Specific Laporan
 
 Endpoint : GET /api/setoran/:id
