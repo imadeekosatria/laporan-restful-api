@@ -32,8 +32,16 @@ salesController.get('/api/sales/:id', async (c) =>{
 })
 
 salesController.get('/api/sales', async (c) =>{
+    const query = c.req.query('name')
     const user = c.get('user') as User
-    const response = await SalesServices.getAll(user)
+
+    let response
+    if (query) {
+        response = await SalesServices.getAllBySalesName(query)
+    }else{
+        response = await SalesServices.getAll(user)
+    }
+
 
     return c.json({
         data: response

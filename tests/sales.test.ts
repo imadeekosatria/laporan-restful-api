@@ -376,4 +376,18 @@ describe('GET /api/sales', () => {
         logger.debug(body)
         expect(body.data).toBeDefined()
     })
+
+    it('should success to get all sales by name', async () => {
+        const response = await app.request(`/api/sales?name=test`, {
+            method: 'get',
+            headers:{
+                'Authorization': 'test'
+            },
+        })
+        expect(response.status).toBe(200)
+        const body = await response.json()
+        logger.debug(body)
+        expect(body.data).toBeDefined()
+            
+    })
 })

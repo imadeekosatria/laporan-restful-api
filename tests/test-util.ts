@@ -144,6 +144,14 @@ export class SalesTest{
             }
         })
     }
+
+    static async getByName(name: string): Promise<Sales>{
+        return await prismaClient.sales.findFirstOrThrow({
+            where: {
+                name: name
+            }
+        })
+    }
 }
 
 export class ProdukTest{

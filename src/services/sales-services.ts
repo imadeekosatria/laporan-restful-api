@@ -1,5 +1,5 @@
 import { Sales, User } from "@prisma/client";
-import { CreateSalesRequest, SalesResponse, toSalesResponse, toSalesResponses, UpdateSalesRequest } from "../model/sales-model";
+import { CreateSalesRequest, salesNameResponse, SalesNameResponses, SalesResponse, toSalesNameResponse, toSalesNameResponses, toSalesResponse, toSalesResponses, UpdateSalesRequest } from "../model/sales-model";
 import { SalesValidation } from "../validation/sales-validation";
 import { prismaClient } from "../app/database";
 import { HTTPException } from "hono/http-exception";
@@ -110,6 +110,28 @@ export class SalesServices{
             return toUserSalesResponseWithUsers(userSalesData)
         }
         
+    }
+
+    static async getAllBySalesName(name: string): Promise<SalesNameResponses>{
+        name = SalesValidation.GET.parse(name)
+        const salesData = await prismaClient.sales.findMany({
+            where:{
+                name: {
+                    contains: name,
+                    mode: 'insensitive'
+                }
+            },
+            select: {
+                id: true,
+                name: true,
+            }
+        })
+        if (salesData.length === 0) {
+            throw new HTTPException(404, {
+                message: "No sales records found"
+            });
+        }
+        return toSalesNameResponses(salesData)
     }
 
     static async delete(id: string): Promise<boolean>{
