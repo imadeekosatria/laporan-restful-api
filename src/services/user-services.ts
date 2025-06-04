@@ -126,7 +126,8 @@ export class UserServices{
                 username: user.username
             },
             data:{
-                token: null
+                token: null,
+                authenticated: false
             }
         })
 
