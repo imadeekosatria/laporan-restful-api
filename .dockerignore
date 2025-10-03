@@ -1,0 +1,11 @@
+node_modules
+bun.lockb
+bun.lock
+package-lock.json
+Dockerfile
+.dockerignore
+.git
+.gitignore
+tests
+.vscode
+*.md
